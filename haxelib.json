@@ -1,0 +1,23 @@
+{
+  "name": "midnight-lib",
+  "url": "https://github.com/runkanrenchu/midnight-lib",
+  "license": "MIT",
+  "tags": [
+    "personal",
+    "useless"
+  ],
+  "description": "Helper PERSONAL library.",
+  "version": "1.0.0-rc",
+  "classPath": "src/",
+  "releasenote": "this is useless.",
+  "contributors": [
+    "BSOD"
+  ],
+  "dependencies": {
+    "flixel": "",
+    "flixel-addons": "",
+    "openfl": "",
+    "lime": ""
+  },
+  "main": "src.Main"
+}
