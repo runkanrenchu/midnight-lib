@@ -8,7 +8,7 @@
   ],
   "description": "Helper PERSONAL library.",
   "version": "1.0.0-rc",
-  "classPath": "src/",
+  "classPath": "midnight/",
   "releasenote": "this is useless.",
   "contributors": [
     "BSOD"
