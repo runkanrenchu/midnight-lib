@@ -1,18 +1,18 @@
-package ui;
+package midnight.ui;
 
-import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.typeLimit.OneOfThree;
-import flixel.graphics.FlxGraphic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
+import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxAssets;
 import flixel.system.FlxSound;
+import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.util.typeLimit.OneOfThree;
 import openfl.Assets;
 import openfl.media.Sound;
 
@@ -36,17 +36,19 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 	var typeText:FlxTypeText;
 	var myText:Array<String>;
 	var finishFlag:Bool = false;
-	var textIndex:Int = 0;
 	var textAmount:Int = 0;
 	var type:String;
-
-	public var box:FlxSprite;
-
 	var portrait:FlxSprite;
 	var frameInd:Int;
 	var nextSound:FlxSound;
 	var path:String;
 	var name:String;
+	var style:BoxType;
+
+	// useful for handling events outside of this class
+	public var textIndex:Int = 0;
+	public var box:FlxSprite;
+	public var textIsTyping:Bool = false;
 
 	/**
 		Creates a simple dialogue box.
@@ -54,13 +56,14 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 		@param x 
 		@param y
 		@param style Defines which type of dialogue box will be created out of 4 available options.
-		@param path If the box type includes a portrait, this path must contain the files for the animation, in Texture Packer's XML format.
+		@param path Contains the path to the text file where the text is retrieved from.
 		@param name If the box type includes a name box, then provide a name for it. Else, don't.
 
 	**/
-	override public function new(x:Float, y:Float, style:BoxType, ?_path:String, ?_name:String)
+	override public function new(x:Float, y:Float, _style:BoxType, ?_path:String, ?_name:String)
 	{
 		super();
+		style = _style;
 
 		path = _path;
 		name = _name;
@@ -68,12 +71,11 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 		box.y = FlxG.height - box.height - 50;
 
 		myText = getText();
-		typeText = new FlxTypeText(box.y - 50, box.x + 20, 0, myText[0], 16);
+		typeText = new FlxTypeText(box.y - 50, box.x + 20, FlxG.width - 40, myText[0], 16);
 
 		typeText.showCursor = true;
 		typeText.useDefaultSound = true;
 		typeText.alignment = CENTER;
-
 		nextSound = new FlxSound().loadEmbedded(#if web "assets/sounds/select.mp3" #else "assets/sounds/select.ogg" #end);
 
 		switch (style)
@@ -93,8 +95,10 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 
 	function getText():Array<String>
 	{
-		var text = Assets.getText("assets/data/dialogue.txt");
-		var dialogArr = text.split("--");
+		var text = Assets.getText(path);
+		var fixedText = StringTools.replace(text, '\\n', '\n');
+
+		var dialogArr = fixedText.split("--");
 		var textArr = [""];
 
 		for (i in dialogArr)
@@ -107,9 +111,9 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 
 	function createNoBox()
 	{
-		typeText.setPosition(FlxG.width / 2, FlxG.height / 2);
+		typeText.x = FlxG.width / 2 - typeText.fieldWidth / 2;
+		typeText.y = FlxG.height / 2;
 		add(typeText);
-		typeText.start(null, false, false, null, () -> finishFlag = true);
 	}
 
 	function createSimple()
@@ -138,7 +142,11 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 				add(typeText);
 				add(nameBox);
 				add(nameText);
-				typeText.start(null, false, false, null, () -> finishFlag = true);
+				typeText.start(null, false, false, null, () ->
+				{
+					finishFlag = true;
+					textIsTyping = false;
+				});
 			}
 		});
 	}
@@ -154,18 +162,23 @@ class Dialogue extends FlxTypedGroup<FlxSprite>
 
 	function next()
 	{
-		if (FlxG.keys.anyJustPressed([ENTER]) && finishFlag)
+		if (FlxG.keys.anyJustPressed([ENTER]) && !finishFlag)
 		{
-			trace("enter pressed");
 			if (textIndex >= textAmount)
 				textIndex = 0;
 			else
 			{
+				textIsTyping = true;
 				textIndex++;
 				typeText.resetText(myText[textIndex]);
 				nextSound.play();
-				typeText.start(null, false, false, null, () -> finishFlag = true);
-				finishFlag = false;
+				typeText.start(null, false, false, null, () ->
+				{
+					textIsTyping = false;
+					finishFlag = false;
+				});
+				finishFlag = true;
+
 				// portrait.animation.frameIndex = frameInd;
 			}
 		}

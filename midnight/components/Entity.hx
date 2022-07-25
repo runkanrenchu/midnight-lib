@@ -1,4 +1,4 @@
-package components;
+package midnight.components;
 
 import flixel.FlxG;
 import flixel.util.FlxColor;

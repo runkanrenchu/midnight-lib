@@ -1,4 +1,4 @@
-- Clean and ready-up Dialogue.hx
+- Clean Dialogue.hx
 - Document Dialogue.hx
 - Finish and document `Entity.loadAnimations()`.
-- Document Button.hx.
+- Document Button.hx
