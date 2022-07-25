@@ -18,6 +18,5 @@
     "flixel-addons": "",
     "openfl": "",
     "lime": ""
-  },
-  "main": "src.Main"
+  }
 }

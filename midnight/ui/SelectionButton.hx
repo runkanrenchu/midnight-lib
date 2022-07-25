@@ -1,9 +1,9 @@
-package ui;
+package midnight.ui;
 
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.input.mouse.FlxMouseEventManager;
-import ui.Button;
+import midnight.ui.Button;
 
 enum SelectionOptions
 {
@@ -27,10 +27,9 @@ class SelectionButton extends Button
 	var status:Status;
 	var option:SelectionOptions;
 
-
 	override public function new(x:Float, y:Float, _text:String, ?_graphic:FlxSprite, ?_option:SelectionOptions)
 	{
-		super(x,y,_text,_graphic);
+		super(x, y, _text, _graphic);
 
 		this.option = _option;
 		// text pos: graphic.width / 2 - text.fieldWidth /2
@@ -39,11 +38,10 @@ class SelectionButton extends Button
 			#if !is_placeholder
 			graphic = new FlxSliceSprite("assets/images/defaultbutton.png", new FlxRect(5, 5, 115 - 10, 30 - 10), 200, 155);
 			#else
-			graphic = new FlxSprite(0,0).loadGraphic("assets/images/defaultbutton.png");
+			graphic = new FlxSprite(0, 0).loadGraphic("assets/images/defaultbutton.png");
 			this.add(graphic);
 			#end
 		}
-
 		else
 			this.graphic = _graphic;
 

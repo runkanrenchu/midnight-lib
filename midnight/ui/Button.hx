@@ -1,4 +1,4 @@
-package ui;
+package midnight.ui;
 
 import flixel.math.FlxPoint;
 import flixel.FlxG;
@@ -14,16 +14,16 @@ class Button extends FlxTypedGroup<FlxSprite>
 	var graphic:FlxSprite;
 	var text:FlxText;
 	var offset:FlxPoint;
-	var callback:FlxSprite -> Void;
+	var callback:FlxSprite->Void;
 
-
-	override public function new(x:Float, y:Float, _text:String, ?_graphic:FlxSprite, ?_callback:FlxSprite -> Void)
+	override public function new(x:Float, y:Float, _text:String, ?_graphic:FlxSprite, ?_callback:FlxSprite->Void)
 	{
 		super();
 
 		if (callback != null)
 			this.callback = _callback;
-		else callback = (sprite) -> {};
+		else
+			callback = (sprite) -> {};
 
 		// text pos: graphic.width / 2 - text.fieldWidth /2
 		if (_graphic == null)
@@ -31,11 +31,10 @@ class Button extends FlxTypedGroup<FlxSprite>
 			#if !is_placeholder
 			graphic = new FlxSliceSprite("assets/images/defaultbutton.png", new FlxRect(5, 5, 115 - 10, 30 - 10), 200, 155);
 			#else
-			graphic = new FlxSprite(0,0).loadGraphic("assets/images/defaultbutton.png");
+			graphic = new FlxSprite(0, 0).loadGraphic("assets/images/defaultbutton.png");
 			this.add(graphic);
 			#end
 		}
-
 		else
 			this.graphic = _graphic;
 
@@ -69,7 +68,6 @@ class Button extends FlxTypedGroup<FlxSprite>
 	{
 		onRelease(sprite);
 	}
-
 
 	override public function update(elapsed:Float)
 	{
