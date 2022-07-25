@@ -1,4 +1,4 @@
-package midnight.ui;
+package ui;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
