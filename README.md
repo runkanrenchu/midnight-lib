@@ -1,3 +1,5 @@
+# Warning: deprecated.
+
 # Midnight Lib
 
 - Midnight is a helper Haxelib for my personal projects. It contains weird code and isn't meant to be used by anyone but me, BSOD, the most casual computer user in the world.
